@@ -75,8 +75,7 @@ export default class UpdateApp extends React.Component {
         this.setState({ [name]: value })
     }
     
-    handleSubmit = (e)=>{
-        console.log(e)
+    updateApp = (e)=>{
         e.preventDefault();
         const { descript, price } = this.state;
         let values = {descript, price}
@@ -99,13 +98,28 @@ export default class UpdateApp extends React.Component {
             }).catch((err)=>{
                 console.log(err)
             })
-        }
-
-            
-
-            
+        } 
     }
 
+    deleteApp = (e) => {
+        e.preventDefault();
+        const { apphash } = this.state.apps
+        this.setState({sendDelete: true})
+        Axios.delete(
+            `http://localhost:8080/api/me/app/delete?apphash=${apphash}`
+        ).then((res)=>{
+            console.log(res)
+            this.setState({
+                sendDelete: false,
+                sendSuccess: 'App deleted, wait for reload'
+            });
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000);
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
 
     render(){
         const { apps } = this.state;
@@ -115,6 +129,7 @@ export default class UpdateApp extends React.Component {
         const { sendError } = this.state;
         const { errors } = this.state;
         const { send } = this.state;
+        const { sendDelete } = this.state;
 
         return(
             <div>
@@ -139,8 +154,9 @@ export default class UpdateApp extends React.Component {
                                     <button onClick={this.openModal} className='btn btn-sm btn-secondary'> Details </button>
                                     {modal && <Details app={apps} appImg={appImage} closeModal={this.closeModal} modal={modal} priceFormat={this.priceFormat}/>}
                                     </div>
-                                    <div className="col-8">
-                                    <button onClick={this.handleSubmit} className='btn btn-sm btn-danger'> Update app! {send && <Spinner/>} </button>
+                                    <div className="col-8 d-flex justify-content-between">
+                                            <button onClick={this.updateApp} className='btn btn-sm btn-warning'> Update {send && <Spinner/>} </button>
+                                            <button onClick={this.deleteApp} className='btn btn-sm btn-danger'> Delete {sendDelete && <Spinner/>} </button>
                                     </div>
                                 </div>
                             </div>

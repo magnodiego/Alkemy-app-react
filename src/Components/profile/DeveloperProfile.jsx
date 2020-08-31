@@ -35,7 +35,6 @@ export default class DeveloperProfile extends React.Component {
         Axios.get(
             `http://localhost:8080/api/me/profile/developed?userhash=${this.state.user.hash}`,
         ).then((res)=>{
-            console.log('dev res', res.data)
             if( res.data.toString() === ''){
                 this.setState({noDeveloperApps: true})
             } else {

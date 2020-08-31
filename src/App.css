@@ -1,0 +1,40 @@
+.userRegister{
+  text-transform: uppercase;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.cardFormat.descript {
+  text-align: justify;
+} 
+
+.cardSize {
+  width: 18rem;
+}
+
+@media (min-width: 576px) {
+    .cardSize{
+      width: 20rem ;
+    }
+ }
+
+@media (min-width: 768px) {
+  .cardSize{
+    width: 14rem ;
+  }
+}
+
+@media (min-width: 992px) {
+  .cardSize{
+    width: 15rem ;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cardSize{
+    width: 18rem ;
+  }
+}

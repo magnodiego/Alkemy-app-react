@@ -80,10 +80,18 @@ export default class CheckOut extends React.Component {
         }
     }
 
+    deleteCart = ()=>{
+        localStorage.removeItem('cart')
+        this.setState({
+            cartDeleted: true
+        })
+    }
+
     render(){
         const { cartApps } = this.state;
         const { total } = this.state;
         const { send } = this.state;
+        const { cartDeleted } = this.state;
 
         return(
             <div>
@@ -101,6 +109,8 @@ export default class CheckOut extends React.Component {
                     </ul>
                     <button className="btn btn-primary mt-2 btn-lg btn-block" onClick={this.handleSubmit} type="submit" disabled={!cartApps}>Buy!</button>
                     {send && <SuccessForm> Thank you for your purchases, redirecting to main. </SuccessForm>}
+                    <button className="btn btn-danger mt-2 btn-lg btn-block" onClick={this.deleteCart} type="submit" disabled={!cartApps}>Delete Cart!</button>
+                    {cartDeleted && <SuccessForm> Cart deleted, redirecting to main. </SuccessForm>}
                 </div>
                 </div>
             </div>

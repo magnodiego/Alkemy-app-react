@@ -84,13 +84,24 @@ export default class AppCard extends React.Component {
                             alreadyBought: true
                         })
                     }
-            });
-        }
+                });
+            }
         } catch (error) {
             
         }
 
-
+        // Check if the apps is already in the cart
+        
+        const cartApps = JSON.parse(localStorage.getItem('cart'))
+        if(cartApps ){
+            cartApps.forEach(element => {
+                if(element.apphash === this.state.apps.apphash ){
+                    this.setState({
+                        alreadyInCart: true
+                    }, console.log(this.state))
+                }
+            });
+        }
     }
 
     priceFormat = (value)=>{
@@ -114,6 +125,9 @@ export default class AppCard extends React.Component {
             localStorage.removeItem('cart')
             localStorage.setItem('cart', JSON.stringify([this.state.apps]))
         }
+        this.setState({
+            added: true
+        })
     }
 
     addToWishlist = ({target}) => {
@@ -162,6 +176,8 @@ export default class AppCard extends React.Component {
         const { user } = this.state;
         const { alreadyInWishlist } = this.state;
         const { alreadyBought } = this.state;
+        const { added } = this.state;
+        const { alreadyInCart } = this.state;
 
         return(
             <div>
@@ -179,7 +195,7 @@ export default class AppCard extends React.Component {
                                     <button onClick={this.openModal} className='btn btn-sm btn-secondary'> Details </button>
                                     {modal && <Details app={apps} appImg={appImage} closeModal={this.closeModal} modal={modal} priceFormat={this.priceFormat}/>}
                                     {user && <button onClick={this.addToWishlist} className={ (user.hash === apps.userhash) ? 'd-none' : 'btn btn-outline-danger border-left-0'}  disabled={alreadyInWishlist || alreadyBought}> { alreadyInWishlist ? 'Already in your wishlist' : 'Add to wishlist' } </button>}
-                                    {user && <button onClick={this.addToCart} className={user.hash === apps.userhash ? 'd-none' : "btn btn-sm btn-primary"} disabled={alreadyBought}> Add to cart! </button> }
+                                    {user && <button onClick={this.addToCart} className={user.hash === apps.userhash ? 'd-none' : " btn btn-sm btn-primary"} disabled={alreadyBought || added || alreadyInCart }> Add to cart! </button> }
                                 </div>
                             </div>
                         </div>

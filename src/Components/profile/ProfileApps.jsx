@@ -46,18 +46,31 @@ export default class ProfileApps extends React.Component {
 
         // Check if the apps were already bought
         try {
-            const cartApps = JSON.parse(localStorage.getItem('user')).apps
-            if(cartApps ){
-                cartApps.split(',').forEach(element => {
+            const userApps = JSON.parse(localStorage.getItem('user')).apps
+            if(userApps ){
+                userApps.split(',').forEach(element => {
                     if(element === this.state.apps.apphash ){
                         this.setState({
                             alreadyBought: true
                         })
                     }
-            });
-        }
+                });
+            }
         } catch (error) {
             
+        }
+
+        // Check if the apps is already in the cart
+        
+        const cartApps = JSON.parse(localStorage.getItem('cart'))
+        if(cartApps ){
+            cartApps.forEach(element => {
+                if(element.apphash === this.state.apps.apphash ){
+                    this.setState({
+                        alreadyInCart: true
+                    }, console.log(this.state))
+                }
+            });
         }
     }
 
@@ -82,6 +95,9 @@ export default class ProfileApps extends React.Component {
             localStorage.removeItem('cart')
             localStorage.setItem('cart', JSON.stringify([this.state.apps]))
         }
+        this.setState({
+            added: true
+        })
     }
 
     render(){
@@ -91,6 +107,8 @@ export default class ProfileApps extends React.Component {
         const { modal } = this.state;
         const { user } = this.state;
         const { alreadyBought } = this.state;
+        const { alreadyInCart } = this.state;
+        const { added } = this.state;
 
         return(
             <div>
@@ -107,7 +125,7 @@ export default class ProfileApps extends React.Component {
                                 <div className="btn-group btn-group-sm">
                                     <button onClick={this.openModal} className='btn btn-sm btn-secondary'> Details </button>
                                     {modal && <Details app={apps} appImg={appImage} closeModal={this.closeModal} modal={modal} priceFormat={this.priceFormat}/>}
-                                    <button onClick={this.addToCart} className={user.hash === apps.userhash || alreadyBought ? 'd-none' : "btn btn-sm btn-primary"}> Add to cart! </button>
+                                    <button onClick={this.addToCart} className={user.hash === apps.userhash || alreadyBought ? 'd-none' : "btn btn-sm btn-primary"} disabled={ added || alreadyInCart } > Add to cart! </button>
                                 </div>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ export default class Main extends React.Component {
 
     componentDidMount(){
 
-        // Hacer consulta al servidor para solicitar las primeras diez applicaciones que seran renderizadas
+        // Get categories
 
         Axios.get(
             'http://localhost:8080/api/main/categories'
@@ -23,9 +23,13 @@ export default class Main extends React.Component {
                 categories: res.data.map(element => { return element.category })
             })
         }).catch((err)=>{
-            console.log(err)
+            this.setState({
+                connectionError: `Can't connect to server, please try again.`
+            })
         })
 
+        // Get apps 
+        
         const query1 = 'Social'
         const query2 = 'Games'
         const query3 = 'Finance'
@@ -49,7 +53,9 @@ export default class Main extends React.Component {
                 }
             });
         }).catch((err)=>{
-            console.log(err)
+            this.setState({
+                connectionError: `Can't connect to server, please try again.`
+            })
         })
     }
 
@@ -66,6 +72,7 @@ export default class Main extends React.Component {
         const { query1 } = this.state;
         const { query2 } = this.state;
         const { query3 } = this.state;
+        const { connectionError } = this.state;
 
         return(
             <div>
@@ -77,6 +84,7 @@ export default class Main extends React.Component {
                 </div>
                 <div className='mb-5'>
                     <div className="container" >
+                        {connectionError && <h2 className='mb-4 mt-5 text-center'> { connectionError } </h2>}
                         <h2 className='mb-4 mt-5'> {query1} </h2>
                     </div>
                     <div className={( query1Apps === '' ) ? 'container-fluid ' : 'd-none' }>
